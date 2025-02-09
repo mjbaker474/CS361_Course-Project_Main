@@ -36,6 +36,8 @@ def process_input(user_input:str) -> None:
             random_inspiration()
         case "3":
             random_fact()
+        case "4":
+            surprise_me()
 
 def welcome_screen()-> None:
     pass
@@ -73,6 +75,20 @@ def generate_random() -> None:
             generate_random()
         case _:
             main_screen()
+
+def surprise_me() -> None:
+    """Randomly chooses an option from the main menu."""
+    rand_num = random.randint(0, 1000)
+    match (rand_num % 3):
+        case 0:
+            generate_random()
+        case 1:
+            random_inspiration()
+        case 2:
+            random_fact()
+        case _:
+            quit()
+
 
 def random_inspiration() -> None:
     """Outputs a random inspirational quote to the screen"""
@@ -159,7 +175,7 @@ def print_main_menu() -> None:
     """Prints out the main menu"""
     print("", "Welcome to the randomizer! Select an option from the menu below, press 'H' for help, or 'Q' to quit.",
           "", "1. Generate a random number", "2. Receive random inspiration", "3. Learn a random fact",
-          "4. Option 4", sep = "\n")
+          "4. Surprise me!", sep = "\n")
 
 def print_help_screen() -> None:
     """Prints out the help screen."""
