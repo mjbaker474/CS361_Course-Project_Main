@@ -27,7 +27,7 @@ def clear() ->None:
 def process_input(user_input:str) -> None:
     match user_input:
         case "q" | "Q":
-            quit()
+            quit_screen()
         case "h" | "H":
             help_screen()
         case "1":
@@ -43,9 +43,27 @@ def welcome_screen()-> None:
     pass
 
 def help_screen():
+    """Displays help screen to user."""
     clear()
     print_title()
-    print_help_screen()
+    print("",
+          "Welcome to the Randomizer app! This app is designed to increase the spontaneity to your life by providing",
+          "you random results across a wide variety of categories. Simply enter your desired option using the",
+          "keyboard when prompted and hit enter to navigate.  Whether you're looking for inspiration, help making",
+          "a decision, or just something unexpected, this app has you covered.", "",
+          "Press any key to return to the main menu, or 'Q' to quit.", sep='\n')
+    user_input = input("")
+    match user_input:
+        case "q" | "Q":
+            quit_screen()
+        case _ :
+            main_screen()
+
+def quit_screen():
+    """Displays quit confirmation screen to user."""
+    clear()
+    print_title()
+    print('\n', "Are you sure you want to quit? Press any key to return to the main menu, or 'Q' to quit.")
     user_input = input("")
     match user_input:
         case "q" | "Q":
@@ -56,7 +74,9 @@ def help_screen():
 def main_screen(title:int = 0) -> None:
     clear()
     print_title(title)
-    print_main_menu()
+    print("", "Welcome to the randomizer! Select an option from the menu below, press 'H' for help, or 'Q' to quit.",
+          "", "1. Generate a random number", "2. Receive random inspiration", "3. Learn a random fact",
+          "4. Surprise me!", sep="\n")
     while True:
         user_input = input("")
         process_input(user_input)
@@ -171,19 +191,8 @@ def print_title(font_number: int = 0) -> None:
     title = pyfiglet.figlet_format("The Randomizer", font=fonts[font_number], width = 256)
     print("\n", title, '_'*256, sep='')
 
-def print_main_menu() -> None:
-    """Prints out the main menu"""
-    print("", "Welcome to the randomizer! Select an option from the menu below, press 'H' for help, or 'Q' to quit.",
-          "", "1. Generate a random number", "2. Receive random inspiration", "3. Learn a random fact",
-          "4. Surprise me!", sep = "\n")
 
-def print_help_screen() -> None:
-    """Prints out the help screen."""
-    print("", "Welcome to the Randomizer app! This app is designed to increase the spontaneity to your life by providing",
-              "you random results across a wide variety of categories. Simply enter your desired option using the",
-              "keyboard when prompted and hit enter to navigate.  Whether you're looking for inspiration, help making",
-              "a decision, or just something unexpected, this app has you covered.","",
-                "Press any key to return to the main menu, or 'Q' to quit.", sep='\n')
+
 
 if __name__ == '__main__':
     main()
