@@ -7,12 +7,8 @@
 # Description: Acts as the primary user interface and client for microservices.
 
 import pyfiglet
-import os
 import random
-import time
 from pyautogui import hotkey
-from pyfiglet import DEFAULT_FONT
-
 
 
 def main():
@@ -38,6 +34,8 @@ def process_input(user_input:str) -> None:
             random_fact()
         case "4":
             surprise_me()
+        case _:
+            print("Invalid input, please try again.")
 
 def welcome_screen()-> None:
     pass
@@ -138,7 +136,7 @@ def random_inspiration() -> None:
     quote = quotes[rand_num % len(quotes)]
     clear()
     print_title()
-    print("\n","Enter Y to generate another random inspiration quote or any other key to return. NOTE: Both of these"
+    print("\n","Enter Y to generate another random inspiration quote or any other key to return. NOTE: Both of these "
                 "actions will overwrite your current quote.", "\n"*2,quote )
     user_input = input("")
     match user_input:
@@ -175,7 +173,7 @@ def random_fact() -> None:
     fact = facts[rand_num % len(facts)]
     clear()
     print_title()
-    print("\n", "Enter Y to generate another random fact or any other key to return. NOTE: Both of these"
+    print("\n", "Enter Y to generate another random fact or any other key to return. NOTE: Both of these "
                 "actions will overwrite your current fact.", "\n" * 2, fact)
     user_input = input("")
     match user_input:
@@ -186,7 +184,7 @@ def random_fact() -> None:
 
 def print_title(font_number: int = 0) -> None:
     """Prints out the title in either default font or font based off of random number passed to the function."""
-    fonts = [DEFAULT_FONT, 'slant', 'alphabet', '3-d', '3x5', '5lineoblique', 'banner3-D', 'doh', 'isometric1',
+    fonts = [pyfiglet.DEFAULT_FONT, 'slant', 'alphabet', '3-d', '3x5', '5lineoblique', 'banner3-D', 'doh', 'isometric1',
              'letters', 'dotmatrix', 'bubble', 'bulbhead', 'digital']
     title = pyfiglet.figlet_format("The Randomizer", font=fonts[font_number], width = 256)
     print("\n", title, '_'*256, sep='')
