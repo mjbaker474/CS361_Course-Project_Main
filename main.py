@@ -9,6 +9,7 @@
 import pyfiglet
 import random
 import random_quote_service
+import random_fact_service
 from pyautogui import hotkey
 
 
@@ -56,7 +57,7 @@ class Randomizer:
                 case "2":
                     self.random_inspiration_menu()
                 case "3":
-                    self.random_fact()
+                    self.random_fact_menu()
                 case "4":
                     self.surprise_me()
                 case "5":
@@ -66,7 +67,7 @@ class Randomizer:
                     print("Invalid input, please try again.")
 
     def random_inspiration_menu(self):
-        """Prints the random fact sub menu."""
+        """Prints the random quote sub menu."""
         self.clear()
         self.print_title()
         print("", "Select an option from the menu below, or any other key to return to the main menu.",
@@ -77,6 +78,21 @@ class Randomizer:
             match user_input:
                 case "1" | "2" | "3" | "4":
                     self.random_inspiration(user_input)
+                case _:
+                    self.main_menu()
+
+    def random_fact_menu(self):
+        """Prints the random fact sub menu."""
+        self.clear()
+        self.print_title()
+        print("", "Select an option from the menu below, or any other key to return to the main menu.",
+              "", "1. Learn about science", "2. Learn about history",
+              "3. Learn about pop culture", "4. Surprise me!", sep="\n")
+        while True:
+            user_input = input("")
+            match user_input:
+                case "1" | "2" | "3" | "4":
+                    self.random_fact(user_input)
                 case _:
                     self.main_menu()
 
@@ -128,11 +144,11 @@ class Randomizer:
 
     def random_inspiration(self, option) -> None:
         """Outputs a random inspirational quote to the screen."""
-        options = {"1": "Artist", "2": "Historical Figure", "3": "Innovator", "4": ""}
+        options = {"1": "Artist ", "2": "Historical Figure ", "3": "Innovator ", "4": ""}
         quote = random_quote_service.random_quote(option)
         self.clear()
         self.print_title()
-        print("\n", f"Enter Y to generate another random inspirational {options[option]} quote, R to return to previous"
+        print("\n", f"Enter Y to generate another random inspirational {options[option]}quote, R to return to previous"
                     f" menu, or any other key to return.", "\n" * 3, quote)
         user_input = input("")
         match user_input:
@@ -145,22 +161,20 @@ class Randomizer:
 
     def random_fact(self, option) -> None:
         """Outputs a random fact to the screen."""
-        facts = [
-            "Bananas are berries, but strawberries are not.",
-            "Honey never spoils. Archaeologists have found pots of honey in ancient Egyptian tombs over 3,000 years old.",
-            "The Eiffel Tower can grow by more than 6 inches during the summer due to metal expansion.",
-            "Octopuses have three hearts and blue blood.",
-            "Wombat poop is cube-shaped to prevent it from rolling away.",
-        ]
-        fact = random.choice(facts)
+        options = {"1": "Science ", "2": "History ", "3": "Pop Culture ", "4": ""}
+        fact = random_fact_service.random_fact(option)
         self.clear()
         self.print_title()
-        print("\n", "Enter Y to generate another random fact or any other key to return.", "\n" * 2, fact)
+        print("\n", f"Enter Y to generate another random {options[option]}fact, R to return to previous"
+                    f" menu, or any other key to return.", "\n" * 3, fact)
         user_input = input("")
-        if user_input.lower() == 'y':
-            self.random_fact()
-        else:
-            self.main_menu()
+        match user_input:
+            case "Y" | 'y':
+                self.random_fact(option)
+            case "R" | 'r':
+                self.random_fact_menu()
+            case _:
+                self.main_menu()
 
     def run(self):
         self.main_menu()
