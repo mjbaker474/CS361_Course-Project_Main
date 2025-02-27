@@ -10,17 +10,30 @@ import pyfiglet
 import random
 import random_quote_service
 import random_fact_service
+import zmq
 from pyautogui import hotkey
 
 
 class Randomizer:
     def __init__(self):
         random.seed()
+        self.socket_a = self.connect_socket(5555)
+        self.socket_b = self.connect_socket(5556)
+        self.socket_c = self.connect_socket(5557)
+        self.socket_d = self.connect_socket(5558)
         self.title_font = pyfiglet.DEFAULT_FONT
+
+    def connect_socket(self, port: int):
+        context = zmq.Context()
+        socket = context.socket(zmq.REQ)
+        socket.connect(f"tcp://localhost:{port}")
+        return socket
 
     def clear(self) -> None:
         """Clears the screen."""
         hotkey('ctrl', 'shift', ';')
+
+
 
     def print_title(self) -> None:
         """Prints out the title in either default font or a randomly selected font."""
@@ -44,7 +57,7 @@ class Randomizer:
         self.print_title()
         print("", "Welcome to the randomizer! Select an option from the menu below, press 'H' for help, or 'Q' to quit.",
               "", "1. Generate a random number", "2. Receive random inspiration", "3. Learn a random fact",
-              "4. Surprise me!", "5. Randomize Font", sep="\n")
+              "4. Randomize Font", "5. Surprise me!", sep="\n")
         while True:
             user_input = input("")
             match user_input:
@@ -59,10 +72,10 @@ class Randomizer:
                 case "3":
                     self.random_fact_menu()
                 case "4":
-                    self.surprise_me()
-                case "5":
                     self.randomize_font()
                     self.main_menu()
+                case "5":
+                    self.surprise_me()
                 case _:
                     print("Invalid input, please try again.")
 
@@ -130,7 +143,7 @@ class Randomizer:
         rand_num = str(random.randint(0, 1000))
         self.clear()
         self.print_title()
-        print("\n", "Enter Y to generate another random number or any other key to return.", "\n" * 2, f"Your random number is: {rand_num}")
+        print("\n", f"Your random number is: {rand_num}", "\n" * 3,"Enter Y to generate another random number or any other key to return." )
         user_input = input("")
         if user_input.lower() == 'y':
             self.generate_random()
@@ -148,8 +161,8 @@ class Randomizer:
         quote = random_quote_service.random_quote(option)
         self.clear()
         self.print_title()
-        print("\n", f"Enter Y to generate another random inspirational {options[option]}quote, R to return to previous"
-                    f" menu, or any other key to return.", "\n" * 3, quote)
+        print("\n", quote, "\n" * 3, f"Enter Y to generate another random inspirational {options[option]}quote, R to return to previous"
+                    f" menu, or any other key to return.")
         user_input = input("")
         match user_input:
             case "Y" | 'y':
@@ -165,8 +178,8 @@ class Randomizer:
         fact = random_fact_service.random_fact(option)
         self.clear()
         self.print_title()
-        print("\n", f"Enter Y to generate another random {options[option]}fact, R to return to previous"
-                    f" menu, or any other key to return.", "\n" * 3, fact)
+        print("\n", fact, "\n" * 3, f"Enter Y to generate another random {options[option]}fact, R to return to previous"
+                    f" menu, or any other key to return.")
         user_input = input("")
         match user_input:
             case "Y" | 'y':
@@ -176,7 +189,7 @@ class Randomizer:
             case _:
                 self.main_menu()
 
-    def run(self):
+    def run(self) -> None:
         self.main_menu()
 
 

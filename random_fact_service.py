@@ -154,7 +154,22 @@ def random_fact(option: str = "4") -> str:
             return "Fact: An error has occurred."
 
 def main():
-    pass
+    # Create a ZMQ context object and use it to bind a socket.
+    context = zmq.Context()
+    socket = context.socket(zmq.REP)
+    socket.bind("tcp://*:5555")
+
+    # Listen for a request from client.
+    while True:
+        message = socket.recv()
+        message = message.decode()
+
+        # Determine appropriate action for request
+        if len(message) > 0:
+            print(f"Received request from the client: {message}")
+            response = random_fact(message)
+            socket.send_string(response)
+            print(f"Sending response to the client: {response}")
 
 if __name__ == '__main__':
     main()
