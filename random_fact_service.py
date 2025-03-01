@@ -141,7 +141,7 @@ def random_fact(option: str = "4") -> str:
 
     rand = random.randint(0, 100)
     if option == "4":
-        option = str(rand % int(option) + 1)
+        option = str(random.randint(1, 3))
     match option:
         case "1":
             return science_facts[rand % len(science_facts)]
@@ -149,7 +149,6 @@ def random_fact(option: str = "4") -> str:
             return history_facts[rand % len(history_facts)]
         case "3":
             return pop_culture_facts[rand % len(pop_culture_facts)]
-
         case _:
             return "Fact: An error has occurred."
 
@@ -157,7 +156,7 @@ def main():
     # Create a ZMQ context object and use it to bind a socket.
     context = zmq.Context()
     socket = context.socket(zmq.REP)
-    socket.bind("tcp://*:5555")
+    socket.bind("tcp://*:2026")
 
     # Listen for a request from client.
     while True:

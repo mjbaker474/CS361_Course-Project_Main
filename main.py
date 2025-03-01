@@ -17,13 +17,14 @@ from pyautogui import hotkey
 class Randomizer:
     def __init__(self):
         random.seed()
-        self.socket_a = self.connect_socket(5555)
-        self.socket_b = self.connect_socket(5556)
-        self.socket_c = self.connect_socket(5557)
-        self.socket_d = self.connect_socket(5558)
+        self.socket_a = self.connect_socket(2025) # Random activity service.
+        self.socket_b = self.connect_socket(2026) # Random fact service.
+        self.socket_c = self.connect_socket(2027) # Random inspirational quote service.
+        self.socket_d = self.connect_socket(2028)
         self.title_font = pyfiglet.DEFAULT_FONT
 
     def connect_socket(self, port: int):
+        """Creates a ZeroMQ TCP connection to communicate with microservices."""
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
         socket.connect(f"tcp://localhost:{port}")
@@ -32,8 +33,6 @@ class Randomizer:
     def clear(self) -> None:
         """Clears the screen."""
         hotkey('ctrl', 'shift', ';')
-
-
 
     def print_title(self) -> None:
         """Prints out the title in either default font or a randomly selected font."""
