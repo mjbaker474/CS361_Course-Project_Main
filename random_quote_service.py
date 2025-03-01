@@ -9,10 +9,6 @@
 import zmq
 import random
 
-def generate_random() -> int:
-    """Returns a randomly generated integer between 0 and 100."""
-    random.seed()
-    return random.randint(0, 100)
 
 def random_quote(option: str = "4") -> str:
     """Returns a random quote from 1 of 3 categories or a random category as determined by the option parameter."""
@@ -115,9 +111,7 @@ def random_quote(option: str = "4") -> str:
         "Set your course by the stars, not by the lights of every passing ship. - Omar Bradley"
         "To handle yourself, use your head; to handle others, use your heart. — Eleanor Roosevelt"
     ]
-
-
-    inovator_quotes = [
+    innovator_quotes = [
         # Scientists
         "Science and everyday life cannot and should not be separated. — Rosalind Franklin",
         "We cannot solve our problems with the same thinking we used when we created them. — Albert Einstein",
@@ -163,9 +157,9 @@ def random_quote(option: str = "4") -> str:
         "Success is not how high you have climbed, but how you make a positive difference to the world. — Roy T. Bennett"
     ]
     # Randomly pick one of the options for the Suprise Me choice
-    rand = generate_random()
+    rand = random.randint(0, 100)
     if option == "4":
-        option = str(rand % int(option) + 1)
+        option = str(random.randint(1, 3))
 
     # Output the quote from the appropriate category.
     match option:
@@ -174,12 +168,26 @@ def random_quote(option: str = "4") -> str:
         case "2":
             return historic_figure_quotes[rand % len(historic_figure_quotes)]
         case "3":
-            return inovator_quotes[rand % len(inovator_quotes)]
+            return innovator_quotes[rand % len(innovator_quotes)]
         case _:
             return "Doh. - Homer Simpson"
 
 def main():
-    pass
+    # Create a ZMQ context object and use it to bind a socket.
+    context = zmq.Context()
+    socket = context.socket(zmq.REP)
+    socket.bind("tcp://*:2027")
+
+    while True:
+        message = socket.recv()
+        message = message.decode()
+
+        # Determine appropriate action for request
+        if len(message) > 0:
+            print(f"Received request from the client: {message}")
+            response = random_quote(message)
+            socket.send_string(response)
+            print(f"Sending response to the client: {response}")
 
 if __name__ == '__main__':
     main()

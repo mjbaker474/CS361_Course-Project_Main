@@ -153,6 +153,7 @@ def random_fact(option: str = "4") -> str:
             return "Fact: An error has occurred."
 
 def main():
+    random.seed()
     # Create a ZMQ context object and use it to bind a socket.
     context = zmq.Context()
     socket = context.socket(zmq.REP)
