@@ -108,6 +108,24 @@ class Randomizer:
                 case _:
                     self.main_menu()
 
+    def random_fact(self, option) -> None:
+        """Outputs a random fact to the screen."""
+        options = {"1": "Science ", "2": "History ", "3": "Pop Culture ", "4": ""}
+        self.socket_b.send_string(option)
+        fact = self.socket_b.recv().decode()
+        self.clear()
+        self.print_title()
+        print("\n", fact, "\n" * 3, f"Enter Y to generate another random {options[option]}fact, R to return to previous"
+                    f" menu, or any other key to return.")
+        user_input = input("")
+        match user_input:
+            case "Y" | 'y':
+                self.random_fact(option)
+            case "R" | 'r':
+                self.random_fact_menu()
+            case _:
+                self.main_menu()
+
     def help_screen(self) -> None:
         """Displays help screen to user."""
         self.clear()
@@ -171,27 +189,7 @@ class Randomizer:
             case _:
                 self.main_menu()
 
-    def random_fact(self, option) -> None:
-        """Outputs a random fact to the screen."""
-        options = {"1": "Science ", "2": "History ", "3": "Pop Culture ", "4": ""}
-        fact = random_fact_service.random_fact(option)
-        self.clear()
-        self.print_title()
-        print("\n", fact, "\n" * 3, f"Enter Y to generate another random {options[option]}fact, R to return to previous"
-                    f" menu, or any other key to return.")
-        user_input = input("")
-        match user_input:
-            case "Y" | 'y':
-                self.random_fact(option)
-            case "R" | 'r':
-                self.random_fact_menu()
-            case _:
-                self.main_menu()
-
-    def run(self) -> None:
-        self.main_menu()
-
 
 if __name__ == '__main__':
     app = Randomizer()
-    app.run()
+    app.main_menu()
