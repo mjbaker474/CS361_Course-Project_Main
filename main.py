@@ -67,7 +67,7 @@ class Randomizer:
                 case "1":
                     self.generate_random()
                 case "2":
-                    self.random_inspiration_menu()
+                    self.random_quote_menu()
                 case "3":
                     self.random_fact_menu()
                 case "4":
@@ -78,7 +78,7 @@ class Randomizer:
                 case _:
                     print("Invalid input, please try again.")
 
-    def random_inspiration_menu(self):
+    def random_quote_menu(self):
         """Prints the random quote sub menu."""
         self.clear()
         self.print_title()
@@ -89,9 +89,28 @@ class Randomizer:
             user_input = input("")
             match user_input:
                 case "1" | "2" | "3" | "4":
-                    self.random_inspiration(user_input)
+                    self.random_quote(user_input)
                 case _:
                     self.main_menu()
+
+    def random_quote(self, option) -> None:
+        """Outputs a random inspirational quote to the screen."""
+        options = {"1": "Artist ", "2": "Historical Figure ", "3": "Innovator ", "4": ""}
+        self.socket_c.send_string(option)
+        quote = self.socket_c.recv().decode()
+        #quote = random_quote_service.random_quote(option)
+        self.clear()
+        self.print_title()
+        print("\n", quote, "\n" * 3, f"Enter Y to generate another random inspirational {options[option]}quote, R to return to previous"
+                    f" menu, or any other key to return.")
+        user_input = input("")
+        match user_input:
+            case "Y" | 'y':
+                self.random_quote(option)
+            case "R" | 'r':
+                self.random_quote_menu()
+            case _:
+                self.main_menu()
 
     def random_fact_menu(self):
         """Prints the random fact sub menu."""
@@ -169,25 +188,10 @@ class Randomizer:
 
     def surprise_me(self) -> None:
         """Randomly chooses an option from the main menu."""
-        random.choice([self.generate_random, self.random_inspiration, self.random_fact])()
+        random.choice([self.generate_random, self.random_quote, self.random_fact])()
 
 
-    def random_inspiration(self, option) -> None:
-        """Outputs a random inspirational quote to the screen."""
-        options = {"1": "Artist ", "2": "Historical Figure ", "3": "Innovator ", "4": ""}
-        quote = random_quote_service.random_quote(option)
-        self.clear()
-        self.print_title()
-        print("\n", quote, "\n" * 3, f"Enter Y to generate another random inspirational {options[option]}quote, R to return to previous"
-                    f" menu, or any other key to return.")
-        user_input = input("")
-        match user_input:
-            case "Y" | 'y':
-                self.random_inspiration(option)
-            case "R" | 'r':
-                self.random_inspiration_menu()
-            case _:
-                self.main_menu()
+
 
 
 if __name__ == '__main__':
