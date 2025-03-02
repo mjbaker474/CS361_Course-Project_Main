@@ -31,8 +31,8 @@ class Randomizer:
         clear()
         self.print_title()
         print("", "Welcome to the randomizer! Select an option from the menu below, press 'H' for help, or 'Q' to quit.",
-              "", "1. Generate a random number", "2. Suggest a random activity", "3. Receive random inspiration",
-              "4. Learn a random fact", "5. Randomize Font", "6. Surprise me!", sep="\n")
+              "", "1. Generate a random number", "2. Suggest a random activity", "3. View a random inspirational quote",
+              "4. Learn a random fact", "5. Get a random recipe suggestion", "6. Randomize Font", "7. Surprise me!", sep="\n")
         while True:
             user_input = input("")
             match user_input:
@@ -49,9 +49,11 @@ class Randomizer:
                 case "4":
                     self.random_fact_menu()
                 case "5":
+                    self.random_recipe_menu()
+                case "6":
                     self.randomize_font()
                     self.main_menu()
-                case "6":
+                case "7":
                     self.surprise_me()
                 case _:
                     print("Invalid input, please try again.")
@@ -146,6 +148,39 @@ class Randomizer:
                 self.random_fact(option)
             case "R" | 'r':
                 self.random_fact_menu()
+            case _:
+                self.main_menu()
+
+    def random_recipe_menu(self) -> None:
+        """Prints the random recipe sub menu."""
+        clear()
+        self.print_title()
+        print("", "Select an option from the menu below, or any other key to return to the main menu.",
+              "", "1. Get an appetizer suggestion", "2. Get an entree suggestion",
+              "3. Get a dessert suggestion", "4. Surprise me!", sep="\n")
+        while True:
+            user_input = input("")
+            match user_input:
+                case "1" | "2" | "3" | "4":
+                    self.random_recipe(user_input)
+                case _:
+                    self.main_menu()
+
+    def random_recipe(self, option: str) -> None:
+        """Outputs a random recipe idea to the screen."""
+        options = {"1": "Appetizer ", "2": "Entree ", "3": "Dessert ", "4": ""}
+        self.socket_d.send_string(option)
+        recipe = self.socket_b.recv().decode()
+        clear()
+        self.print_title()
+        print("\n", recipe, "\n" * 3, f"Enter Y to generate another random {options[option]}suggestion, R to return to previous"
+                    f" menu, or any other key to return.")
+        user_input = input("")
+        match user_input:
+            case "Y" | 'y':
+                self.random_recipe(option)
+            case "R" | 'r':
+                self.random_recipe_menu()
             case _:
                 self.main_menu()
 
