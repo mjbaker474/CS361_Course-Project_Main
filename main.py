@@ -16,10 +16,10 @@ class Randomizer:
     """A randomizer object is an instance of the Randomizer app."""
     def __init__(self):
         random.seed()
-        self.socket_a = connect_socket(2025) # Random activity service.
-        self.socket_b = connect_socket(2026) # Random fact service.
-        self.socket_c = connect_socket(2027) # Random inspirational quote service.
-        self.socket_d = connect_socket(2028)
+        self.socket_a = connect_socket(2025) # Random activity service
+        self.socket_b = connect_socket(2026) # Random fact service
+        self.socket_c = connect_socket(2027) # Random inspirational quote service
+        self.socket_d = connect_socket(2028) # Random recipe suggestion
         self.title_font = pyfiglet.DEFAULT_FONT
 
     def print_title(self) -> None:
@@ -170,7 +170,7 @@ class Randomizer:
         """Outputs a random recipe idea to the screen."""
         options = {"1": "Appetizer ", "2": "Entree ", "3": "Dessert ", "4": ""}
         self.socket_d.send_string(option)
-        recipe = self.socket_b.recv().decode()
+        recipe = self.socket_d.recv().decode()
         clear()
         self.print_title()
         print("\n", recipe, "\n" * 3, f"Enter Y to generate another random {options[option]}suggestion, R to return to previous"
